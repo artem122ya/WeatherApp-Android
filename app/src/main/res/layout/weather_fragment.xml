@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".weatherview.WeatherFragment">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/cityNameGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+
+    <ImageView
+        android:id="@+id/placeIconImageView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/text_size"
+        android:src="@drawable/ic_place"
+        app:layout_constraintBottom_toTopOf="@+id/cityNameGuideline"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/cityNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:text="City name"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toBottomOf="@+id/placeIconImageView"
+        app:layout_constraintStart_toEndOf="@+id/placeIconImageView"
+        app:layout_constraintTop_toTopOf="@+id/placeIconImageView" />
+
+    <FrameLayout
+        android:id="@+id/locationButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="@dimen/text_size"
+            android:layout_height="@dimen/text_size"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_my_location" />
+    </FrameLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/hoursForecastRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/daysForecastRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".25"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/hour_forecast_list_item"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/daysForecastRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".37"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/day_forecast_list_item" />
+
+    <ImageView
+        android:id="@+id/weatherImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_white_day_cloudy"
+        app:layout_constraintBottom_toTopOf="@+id/hoursForecastRecyclerView"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cityNameGuideline"
+        app:layout_constraintVertical_bias="0.7" />
+
+    <TextView
+        android:id="@+id/temperatureTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:text="27°/19°"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toEndOf="@+id/temperatureIconImageView"
+        app:layout_constraintTop_toTopOf="@+id/weatherImageView" />
+
+    <ImageView
+        android:id="@+id/temperatureIconImageView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/text_size"
+        android:src="@drawable/ic_temp"
+        app:layout_constraintBottom_toBottomOf="@+id/temperatureTextView"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/temperatureTextView" />
+
+    <TextView
+        android:id="@+id/humidityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:text="33%"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toEndOf="@+id/humidityIconImageView"
+        app:layout_constraintTop_toBottomOf="@+id/temperatureTextView" />
+
+    <ImageView
+        android:id="@+id/humidityIconImageView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/text_size"
+        android:src="@drawable/ic_humidity"
+        app:layout_constraintBottom_toBottomOf="@+id/humidityTextView"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/humidityTextView" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.58" />
+
+    <TextView
+        android:id="@+id/windSpeedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="10dp"
+        android:text="5м/сек"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintStart_toEndOf="@+id/windIconImageView"
+        app:layout_constraintTop_toBottomOf="@+id/humidityTextView" />
+
+    <ImageView
+        android:id="@+id/windIconImageView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/text_size"
+        android:src="@drawable/ic_wind"
+        app:layout_constraintBottom_toBottomOf="@+id/windSpeedTextView"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/windSpeedTextView" />
+
+    <ImageView
+        android:id="@+id/windDirectionIconImageView"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/text_size"
+        android:src="@drawable/icon_wind_ne"
+        app:layout_constraintBottom_toBottomOf="@+id/windSpeedTextView"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintStart_toEndOf="@+id/windSpeedTextView"
+        app:layout_constraintTop_toTopOf="@+id/windSpeedTextView" />
+
+
+</android.support.constraint.ConstraintLayout>
