@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">WeatherApp</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="monday_label">Mon</string>
+    <string name="tuesday_label">Tues</string>
+    <string name="wednesday_label">Wed</string>
+    <string name="thursday_label">Thurs</string>
+    <string name="friday_label">Fri</string>
+    <string name="saturday_label">Sat</string>
+    <string name="sunday_label">Sun</string>
+
 </resources>

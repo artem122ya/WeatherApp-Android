@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="12dp">
 
     <TextView
-        android:id="@+id/dayTemperature"
+        android:id="@+id/dayOfWeekTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="temperature text"/>
+        android:text="ЧТ"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text_size"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/dayTemperatureTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="27°/19°"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text_size"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:id="@+id/weatherIconImageView"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_day_cloudy_black" />
 
 
 </LinearLayout>

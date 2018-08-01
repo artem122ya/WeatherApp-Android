@@ -4,9 +4,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import artem122ya.weatherapp.R
 import artem122ya.weatherapp.models.Period
+import artem122ya.weatherapp.util.COLOR_BLACK
+import artem122ya.weatherapp.util.getDayOfWeekTitle
+import artem122ya.weatherapp.util.getTemperatureTitle
+import artem122ya.weatherapp.util.getWeatherDrawable
 import kotlinx.android.synthetic.main.day_forecast_list_item.view.*
 
 
@@ -28,7 +33,11 @@ class DaysForecastAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is DayViewHolder) {
-            holder.temperatureTextView.text = daysDataSet[position].avgTempC.toString()
+            val forecast: Period = daysDataSet[position]
+            val drawable = forecast.getWeatherDrawable(COLOR_BLACK)
+            if (drawable != null) holder.weatherImageView.setImageResource(drawable)
+            holder.temperatureTextView.text = getTemperatureTitle(forecast.maxTempC, forecast.minTempC)
+            holder.dayOfWeekTextView.text = getDayOfWeekTitle(forecast.timestamp, holder.dayOfWeekTextView.context)
         }
     }
 
@@ -37,7 +46,9 @@ class DaysForecastAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class DayViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
 
-        val temperatureTextView: TextView = view.findViewById(R.id.dayTemperature)
+        val dayOfWeekTextView: TextView = view.dayOfWeekTextView
+        val temperatureTextView: TextView = view.dayTemperatureTextView
+        val weatherImageView: ImageView = view.weatherIconImageView
 
         init {
             view.setOnClickListener(this)
