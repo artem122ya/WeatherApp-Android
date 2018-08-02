@@ -11,7 +11,7 @@ fun getTemperatureTitle(maxTemp: Double, minTemp: Double): String {
 }
 
 fun getDayOfWeekTitle(timestamp: Int, context: Context): String {
-    val sdf = SimpleDateFormat("EEEE", Locale.US)
+    val sdf = SimpleDateFormat("EEEE", Locale.US) //TODO flexible on location
     val date = Date(timestamp.toLong() * 1000)
     val day = sdf.format(date)
     return when(day) {
@@ -24,4 +24,8 @@ fun getDayOfWeekTitle(timestamp: Int, context: Context): String {
         ("Sunday") -> context.getString(R.string.sunday_label)
         else -> ""
     }
+}
+
+fun getHourTitle(timestamp: Int) {
+
 }

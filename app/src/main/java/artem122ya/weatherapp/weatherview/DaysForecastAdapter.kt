@@ -34,8 +34,9 @@ class DaysForecastAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is DayViewHolder) {
             val forecast: Period = daysDataSet[position]
-            val drawable = forecast.getWeatherDrawable(COLOR_BLACK)
-            if (drawable != null) holder.weatherImageView.setImageResource(drawable)
+            forecast.getWeatherDrawable(COLOR_BLACK)?.let {
+                holder.weatherImageView.setImageResource(it)
+            }
             holder.temperatureTextView.text = getTemperatureTitle(forecast.maxTempC, forecast.minTempC)
             holder.dayOfWeekTextView.text = getDayOfWeekTitle(forecast.timestamp, holder.dayOfWeekTextView.context)
         }

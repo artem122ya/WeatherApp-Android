@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="1"
-        app:srcCompat="@drawable/ic_white_day_rain" />
+        app:srcCompat="@drawable/ic_day_rain_white" />
 
     <TextView
         android:id="@+id/hourTemperatureTextView"
