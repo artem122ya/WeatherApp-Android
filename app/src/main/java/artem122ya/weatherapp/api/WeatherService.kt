@@ -13,8 +13,11 @@ interface WeatherService {
     fun getDailyForecast(@Path("lat") latitude: Double, @Path("lon") longitude: Double): Deferred<Result>
 
     @GET("forecasts/{lat},{lon}?filter=1hr&limit=24&client_id=${Constants.CLIENT_ID}&client_secret=${Constants.CLIENT_SECRET}")
-    fun getHourlyForecast(@Path("lat") latitude: Double, @Path("lon") longitude: Double): Deferred<Result>
+    fun getHourlyForecast(@Path("lat") latitude: Double, @Path("lon") longitude: Double, @Query("skip") skip: Int): Deferred<Result>
 
-    @GET("places/search?query=name:^{query}&client_id=${Constants.CLIENT_ID}&client_secret=${Constants.CLIENT_SECRET}")
-    fun searchPlaces(@Path("searchQuery") searchQuery: String, @Query("limit") limit: Int, @Query("skip") skip: Int): Deferred<Result>
+    @GET("places/search?client_id=${Constants.CLIENT_ID}&client_secret=${Constants.CLIENT_SECRET}")
+    fun searchPlaces(@Query("query") query: String, @Query("limit") limit: Int, @Query("skip") skip: Int): Deferred<Result>
+
+    @GET("/places/closest?client_id=${Constants.CLIENT_ID}&client_secret=${Constants.CLIENT_SECRET}")
+    fun getPlace(@Query("p") latAndLon: String): Deferred<Result>
 }

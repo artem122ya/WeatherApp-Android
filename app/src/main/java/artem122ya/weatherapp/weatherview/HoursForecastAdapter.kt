@@ -33,7 +33,8 @@ class HoursForecastAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 holder.weatherImageView.setImageResource(it)
             }
             holder.temperatureTextView.text = (forecast.avgTempC.toInt().toString() + "°")
-            holder.hourLabelTextView.text = forecast.pressureIN.toString() //TODO hours
+            holder.hourLabelTextView.text = holder.hourLabelTextView.context
+                    .getString(R.string.hours_label, getHourTitle(forecast.dateTimeISO).toInt())
         }
     }
 

@@ -1,10 +1,10 @@
 package artem122ya.weatherapp.weatherview
 
-import android.location.Location
 import artem122ya.weatherapp.api.ServiceProvider
 import artem122ya.weatherapp.api.WeatherService
-import artem122ya.weatherapp.models.Result
+import artem122ya.weatherapp.models.Loc
 import artem122ya.weatherapp.models.Period
+import artem122ya.weatherapp.models.Result
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
@@ -16,7 +16,9 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
             weatherView?.presenter = this
         }
 
-    private var currentLocation: Location? = null
+    private var currentLocation: Loc? = null
+
+    private var daysForecastData: List<Period>? = null
 
     override fun start() {
         if (currentLocation == null) {
@@ -27,9 +29,9 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
                 weatherView?.requestLocation()
             }
         }
-        loadDaysForecast()
-        loadHoursForecast()
-
+        loadDaysForecast(0)
+        loadHoursForecast(0)
+        loadCityName()
     }
 
     override fun onLocationButtonClicked() {
@@ -49,41 +51,46 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
         } else weatherView?.showNoPermissionErrorMessage()
     }
 
-    override fun onDayClicked(day: Period) {
-
+    override fun onDayClicked(selectedDay: Int) {
+        val dayForecast = daysForecastData?.get(selectedDay)
+        if (dayForecast != null) {
+            weatherView?.setForecast(dayForecast)
+        } else {
+            loadDaysForecast(selectedDay)
+        }
+        loadHoursForecast(selectedDay)
     }
 
-    override fun setLocation(location: Location?) {
+    override fun setLocation(location: Loc) {
         currentLocation = location
-        loadDaysForecast()
-        loadHoursForecast()
+        loadDaysForecast(0)
+        loadHoursForecast(0)
+        loadCityName()
     }
 
-    override fun loadForecast() {
-
-    }
-
-    private fun loadDaysForecast() = launch(UI)  {
+    private fun loadDaysForecast(selectedDay: Int) = launch(UI)  {
         val weatherService: WeatherService = ServiceProvider.weatherService
         var result: Result? = null
         try {
-            result = weatherService.getDailyForecast(currentLocation!!.latitude, currentLocation!!.longitude).await()
+            result = weatherService.getDailyForecast(currentLocation!!.lat, currentLocation!!.long).await()
         } catch (e: Exception) {
 
         }
-        val daysForecastData: List<Period>? = result?.response?.get(0)?.periods
-        weatherView?.setDaysForecast(daysForecastData ?: ArrayList())
-        daysForecastData?.get(0)?.let {
-            weatherView?.setForecast(it)
+        val daysForecastResult: List<Period>? = result?.response?.get(0)?.periods
+        if (daysForecastResult != null) {
+            daysForecastData = daysForecastResult
+            weatherView?.setDaysForecast(daysForecastResult)
+            weatherView?.setForecast(daysForecastResult[selectedDay])
         }
-        weatherView?.setCityName(result?.response?.get(0)?.profile?.tz ?: "")
+
+
     }
 
-    private fun loadHoursForecast() = launch(UI) {
+    private fun loadHoursForecast(selectedDay: Int) = launch(UI) {
         val weatherService: WeatherService = ServiceProvider.weatherService
         var result: Result? = null
         try {
-            result = weatherService.getHourlyForecast(currentLocation!!.latitude, currentLocation!!.longitude).await()
+            result = weatherService.getHourlyForecast(currentLocation!!.lat, currentLocation!!.long, selectedDay * 24).await()
         } catch (e: Exception) {
 
         }
@@ -92,6 +99,19 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
         val hoursForecastData: List<Period>? = result?.response?.get(0)?.periods
         weatherView?.setHoursForecast(hoursForecastData ?: ArrayList())
         
+    }
+
+    private fun loadCityName() = launch(UI) {
+        val weatherService: WeatherService = ServiceProvider.weatherService
+        var result: Result? = null
+        try {
+            currentLocation?.let {
+                result = weatherService.getPlace(it.lat.toString() + "," + it.long.toString()).await()
+            }
+        } catch (e: Exception) {
+            e.message
+        }
+        weatherView?.setCityName(result?.response?.get(0)?.place?.name ?: "")
     }
 
     companion object {

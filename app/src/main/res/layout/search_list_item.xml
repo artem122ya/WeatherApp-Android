@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:background="?android:selectableItemBackground">
 
     <TextView
         android:id="@+id/cityAndCountryTextView"
@@ -12,5 +15,5 @@
         android:textColor="@color/colorBlack"
         android:layout_gravity="center"
         tools:text="City Name, Country Name"
-        />
+        android:textSize="@dimen/text_size" />
 </FrameLayout>

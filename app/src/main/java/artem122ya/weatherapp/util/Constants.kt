@@ -5,5 +5,6 @@ class Constants private constructor() {
         const val API_URL = "https://api.aerisapi.com/"
         const val CLIENT_ID = "cHrWRsBWSBBvpZSKapYyz"
         const val CLIENT_SECRET = "d3TTby8tpC7ZdM9GgXBZly28kAipY0ABdCTkyaOk "
+        const val SEARCH_QUERY_PARAM = "name:^"
     }
 }

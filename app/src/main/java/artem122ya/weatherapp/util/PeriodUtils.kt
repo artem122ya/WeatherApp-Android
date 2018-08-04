@@ -7,9 +7,14 @@ val Period.windSpeedMeterPerSecond: Double
     get() = windSpeedKPH * 1000 / 3600
 
 fun Period.getWindDirectionDrawable(): Int? {
-    return when(windDir) {
+    var direction = windDir
+    if (direction.length == 3) {
+        direction = windDir.substring(1)
+    }
+    return when(direction) {
         ("N") -> R.drawable.icon_wind_n
         ("NE") -> R.drawable.icon_wind_ne
+        ("E") -> R.drawable.icon_wind_e
         ("SE") -> R.drawable.icon_wind_se
         ("S") -> R.drawable.icon_wind_s
         ("SW") -> R.drawable.icon_wind_sw

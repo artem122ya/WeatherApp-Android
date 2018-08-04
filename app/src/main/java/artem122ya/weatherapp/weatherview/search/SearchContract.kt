@@ -2,6 +2,7 @@ package artem122ya.weatherapp.weatherview.search
 
 import artem122ya.weatherapp.BasePresenter
 import artem122ya.weatherapp.BaseView
+import artem122ya.weatherapp.models.Loc
 import artem122ya.weatherapp.models.Response
 
 interface SearchContract {
@@ -15,6 +16,8 @@ interface SearchContract {
         fun hideProgressBar()
 
         fun showLoadingErrorMessage()
+
+        fun onLocationPicked(location: Loc)
 
     }
 

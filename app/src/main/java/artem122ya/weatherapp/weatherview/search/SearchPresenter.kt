@@ -3,13 +3,13 @@ package artem122ya.weatherapp.weatherview.search
 import artem122ya.weatherapp.api.ServiceProvider
 import artem122ya.weatherapp.api.WeatherService
 import artem122ya.weatherapp.models.Response
-import artem122ya.weatherapp.models.Result
+import artem122ya.weatherapp.util.Constants
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 class SearchPresenter private constructor(): SearchContract.Presenter {
 
-    private val resultsPerPage = 10
+    private val resultsPerPage = 30
 
     private var searchView: SearchContract.View? = null
         set(value){
@@ -24,7 +24,7 @@ class SearchPresenter private constructor(): SearchContract.Presenter {
     override fun start() {}
 
     override fun onResultClick(response: Response) {
-
+        searchView?.onLocationPicked(response.loc)
     }
 
     override fun searchPlaces(query: String) {
@@ -44,15 +44,15 @@ class SearchPresenter private constructor(): SearchContract.Presenter {
     private fun loadResults(overrideDataSet: Boolean) = launch(UI) {
         searchView?.showProgressBar()
         val weatherService: WeatherService = ServiceProvider.weatherService
-        var result: Result? = null
         try {
-            result = weatherService.searchPlaces(previousQuery, resultsPerPage, page * resultsPerPage).await()
+            val result = weatherService.searchPlaces(Constants.SEARCH_QUERY_PARAM + previousQuery,
+                    resultsPerPage, page * resultsPerPage).await()
             page++
+            searchView?.setSearchResultsData(result.response, overrideDataSet)
         } catch (e: Exception) {
             searchView?.showLoadingErrorMessage()
         }
         searchView?.hideProgressBar()
-        searchView?.setSearchResultsData(result?.response ?: ArrayList(), overrideDataSet)
     }
 
     companion object {

@@ -34,7 +34,7 @@ class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is SearchResultViewHolder) {
             responseDataSet[position]?.place?.let {
-                holder.cityAndCountryTextView.text = it.name + ", " + it.country
+                holder.cityAndCountryTextView.text = it.name + ", " + it.countryFull
             }
         }
     }
@@ -49,6 +49,7 @@ class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (!isProgressBarVisible) {
             isProgressBarVisible = true
             responseDataSet.add(null)
+            notifyDataSetChanged()
         }
     }
 
@@ -56,6 +57,7 @@ class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (isProgressBarVisible) {
             responseDataSet.removeAt(responseDataSet.size - 1)
             isProgressBarVisible = false
+            notifyDataSetChanged()
         }
     }
 
@@ -63,6 +65,7 @@ class SearchAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (isProgressBarVisible) hideProgressBar()
         if (override) responseDataSet.clear()
         responseDataSet.addAll(data)
+        notifyDataSetChanged()
     }
 
     inner class SearchResultViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {

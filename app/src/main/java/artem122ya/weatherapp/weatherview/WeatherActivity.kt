@@ -3,21 +3,18 @@ package artem122ya.weatherapp.weatherview
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import artem122ya.weatherapp.R
-import artem122ya.weatherapp.util.replaceFragmentInActivity
 
 class WeatherActivity: AppCompatActivity() {
 
-    private lateinit var weatherPresenter: WeatherPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.weather_activity)
 
-        val weatherFragment = supportFragmentManager.findFragmentById(R.id.contentFrame)
-                as WeatherFragment? ?: WeatherFragment.newInstance().also {
-            replaceFragmentInActivity(it, R.id.contentFrame)
+        if (supportFragmentManager.findFragmentById(R.id.contentFrame) == null) {
+            val weatherFragment = WeatherFragment.newInstance()
+            WeatherPresenter.getInstance(weatherFragment)
+            supportFragmentManager.beginTransaction().add(R.id.contentFrame, weatherFragment).commit()
         }
-
-        weatherPresenter = WeatherPresenter.getInstance(weatherFragment)
     }
 }

@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-    <string name="monday_label">Mon</string>
-    <string name="tuesday_label">Tues</string>
-    <string name="wednesday_label">Wed</string>
-    <string name="thursday_label">Thurs</string>
-    <string name="friday_label">Fri</string>
-    <string name="saturday_label">Sat</string>
-    <string name="sunday_label">Sun</string>
     <string name="meters_per_second_label">%1$dmeters/sec</string>
     <string name="humidity_percentage_label" translatable="false">%1$d%%</string>
+    <string name="hours_label" translatable="false">%1$02d \u2070\u2070</string>
+    <string name="temperature_label" translatable="false">%1d°/%2d°</string>
     <string name="search_loading_error_message">Error loading locations</string>
 </resources>
