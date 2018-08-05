@@ -3,4 +3,7 @@
     <string name="app_name">WeatherApp</string>
     <string name="meters_per_second_label">%1$dм/сек</string>
     <string name="search_loading_error_message">Ошибка при выполнении запроса</string>
+    <string name="loading_data_error_message">Ошибка при загрузке данных</string>
+    <string name="access_location_error_message">Не удалось получить местоположение</string>
+    <string name="location_permission_error_message">Не удалось получить разрешение для доступа к местоположению</string>
 </resources>

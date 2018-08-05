@@ -28,9 +28,12 @@ import android.content.Intent
 import artem122ya.weatherapp.models.Loc
 
 
-const val LOCATION_BUNDLE_EXTRA = "location"
 
 class WeatherFragment: Fragment(), WeatherContract.View {
+
+    companion object {
+        const val LOCATION_BUNDLE_EXTRA = "artem122ya.weatherapp.location"
+    }
 
     private val LOCATION_PERMISSION_REQUEST = 1
     private val SEARCH_FRAGMENT_CALLBACK = 0
@@ -93,13 +96,24 @@ class WeatherFragment: Fragment(), WeatherContract.View {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SEARCH_FRAGMENT_CALLBACK) {
+                val loc = data!!.extras[LOCATION_BUNDLE_EXTRA]
+                (loc as Loc).let {
+                    presenter.setLocation(it)
+                }
+            }
+        }
+    }
+
     @SuppressLint("MissingPermission")
     override fun requestLocation() {
         fusedLocationClient.lastLocation
                 .addOnSuccessListener { location : Location? ->
-                    location?.let {
-                        presenter.setLocation(Loc(it.longitude, it.latitude))
-                    }
+                    presenter.setLocation(Loc(location?.longitude ?: 0.0, location?.latitude ?: 0.0))
                 }
     }
 
@@ -119,10 +133,13 @@ class WeatherFragment: Fragment(), WeatherContract.View {
 
     override fun setDaysForecast(data: List<Period>) {
         daysForecastAdapter.daysDataSet = data
+        daysForecastRecyclerView?.scrollToPosition(0)
+        daysForecastAdapter.resetSelectedItem()
     }
 
     override fun setHoursForecast(data: List<Period>) {
         hoursForecastAdapter.hoursDataSet = data
+        hoursForecastRecyclerView?.scrollToPosition(0)
     }
 
     override fun isLocationAvailable(): Boolean {
@@ -141,45 +158,30 @@ class WeatherFragment: Fragment(), WeatherContract.View {
         return false
     }
 
-    override fun showLoadingError() {
-
-    }
-
-    override fun showLocationNotAvailableError() {
-        Snackbar.make(activity!!.findViewById(android.R.id.content),
-                "Turn on GPS!", Snackbar.LENGTH_LONG).show()
-
-    }
-
-    override fun showNoPermissionErrorMessage() {
-        Snackbar.make(activity!!.findViewById(android.R.id.content),
-                "Permission needed to access location", Snackbar.LENGTH_LONG).show()
-    }
-
     override fun openSearchFragment() {
         val ft = activity!!.supportFragmentManager.beginTransaction()
         val searchFragment = SearchFragment()
         SearchPresenter.getInstance(searchFragment)
         searchFragment.setTargetFragment(this@WeatherFragment, SEARCH_FRAGMENT_CALLBACK)
-        ft.addToBackStack(WeatherFragment.javaClass.name)
+        ft.addToBackStack(WeatherFragment::class.java.name)
         ft.replace(R.id.contentFrame, searchFragment)
         ft.commit()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SEARCH_FRAGMENT_CALLBACK) {
-                val loc = data!!.extras[LOCATION_BUNDLE_EXTRA]
-                (loc as Loc).let {
-                    presenter.setLocation(it)
-                }
-            }
-        }
+    override fun showLoadingError() {
+        Snackbar.make(activity!!.findViewById(android.R.id.content),
+                getString(R.string.loading_data_error_message), Snackbar.LENGTH_LONG).show()
     }
 
-    companion object {
-        fun newInstance() = WeatherFragment()
+    override fun showLocationNotAvailableError() {
+        Snackbar.make(activity!!.findViewById(android.R.id.content),
+                getString(R.string.access_location_error_message), Snackbar.LENGTH_LONG).show()
+
     }
+
+    override fun showNoPermissionErrorMessage() {
+        Snackbar.make(activity!!.findViewById(android.R.id.content),
+                getString(R.string.location_permission_error_message), Snackbar.LENGTH_LONG).show()
+    }
+
 }

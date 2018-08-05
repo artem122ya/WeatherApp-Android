@@ -16,6 +16,7 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
             weatherView?.presenter = this
         }
 
+    private val defaultLocation =  Loc(35.1396, 47.8388)
     private var currentLocation: Loc? = null
 
     private var daysForecastData: List<Period>? = null
@@ -27,11 +28,11 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
             }
             if (weatherView?.isLocationAvailable() == true) {
                 weatherView?.requestLocation()
+            } else {
+                currentLocation = defaultLocation
             }
         }
-        loadDaysForecast(0)
-        loadHoursForecast(0)
-        loadCityName()
+        loadForecastData()
     }
 
     override fun onLocationButtonClicked() {
@@ -40,15 +41,21 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
         }
         if (weatherView?.isLocationAvailable() == true) {
             weatherView?.requestLocation()
-        } else weatherView?.showLocationNotAvailableError()
+        } else {
+            weatherView?.showLocationNotAvailableError()
+            loadForecastData()
+        }
     }
 
     override fun onPermissionRequestResultCallback(isPermissionGranted: Boolean) {
         if (isPermissionGranted) {
             if (weatherView?.isLocationAvailable() == true) {
                 weatherView?.requestLocation()
+                return
             } else weatherView?.showLocationNotAvailableError()
         } else weatherView?.showNoPermissionErrorMessage()
+        currentLocation = defaultLocation
+        loadForecastData()
     }
 
     override fun onDayClicked(selectedDay: Int) {
@@ -62,7 +69,16 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
     }
 
     override fun setLocation(location: Loc) {
-        currentLocation = location
+        if (location.lat == 0.0 && location.long == 0.0) {
+            weatherView?.showLocationNotAvailableError()
+            if (currentLocation == null) currentLocation = defaultLocation
+        } else {
+            currentLocation = location
+        }
+        loadForecastData()
+    }
+
+    private fun loadForecastData() {
         loadDaysForecast(0)
         loadHoursForecast(0)
         loadCityName()
@@ -74,31 +90,29 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
         try {
             result = weatherService.getDailyForecast(currentLocation!!.lat, currentLocation!!.long).await()
         } catch (e: Exception) {
-
+            weatherView?.showLoadingError()
         }
+        if (result?.success != true) weatherView?.showLoadingError()
         val daysForecastResult: List<Period>? = result?.response?.get(0)?.periods
         if (daysForecastResult != null) {
             daysForecastData = daysForecastResult
             weatherView?.setDaysForecast(daysForecastResult)
             weatherView?.setForecast(daysForecastResult[selectedDay])
         }
-
-
     }
 
     private fun loadHoursForecast(selectedDay: Int) = launch(UI) {
+        weatherView?.setHoursForecast(ArrayList())
         val weatherService: WeatherService = ServiceProvider.weatherService
         var result: Result? = null
         try {
             result = weatherService.getHourlyForecast(currentLocation!!.lat, currentLocation!!.long, selectedDay * 24).await()
         } catch (e: Exception) {
-
+            weatherView?.showLoadingError()
         }
-
-        //TODO cryptic code
+        if (result?.success != true) weatherView?.showLoadingError()
         val hoursForecastData: List<Period>? = result?.response?.get(0)?.periods
         weatherView?.setHoursForecast(hoursForecastData ?: ArrayList())
-        
     }
 
     private fun loadCityName() = launch(UI) {
@@ -109,9 +123,12 @@ class WeatherPresenter private constructor(): WeatherContract.Presenter {
                 result = weatherService.getPlace(it.lat.toString() + "," + it.long.toString()).await()
             }
         } catch (e: Exception) {
-            e.message
+            weatherView?.showLoadingError()
         }
-        weatherView?.setCityName(result?.response?.get(0)?.place?.name ?: "")
+        if (result?.success != true) weatherView?.showLoadingError()
+        result?.response?.get(0)?.place?.name?.let {
+            weatherView?.setCityName(it)
+        }
     }
 
     companion object {

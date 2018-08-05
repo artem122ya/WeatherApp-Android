@@ -18,13 +18,12 @@ import android.view.inputmethod.InputMethodManager
 import artem122ya.weatherapp.R
 import artem122ya.weatherapp.models.Loc
 import artem122ya.weatherapp.models.Response
-import artem122ya.weatherapp.weatherview.LOCATION_BUNDLE_EXTRA
 import artem122ya.weatherapp.weatherview.WeatherFragment
 import kotlinx.android.synthetic.main.location_search_fragment.*
 
 
 class SearchFragment : Fragment(), SearchContract.View {
-    //TODO text to big
+
     override lateinit var presenter: SearchContract.Presenter
 
     private val searchAdapter = SearchAdapter()
@@ -73,6 +72,7 @@ class SearchFragment : Fragment(), SearchContract.View {
 
 
     override fun setSearchResultsData(data: List<Response>, overrideDataSet: Boolean) {
+        if (overrideDataSet) searchResultsRecyclerView?.scrollToPosition(0)
         searchAdapter.setData(data, overrideDataSet)
         isLoading = data.isEmpty()
     }
@@ -80,7 +80,7 @@ class SearchFragment : Fragment(), SearchContract.View {
     override fun onLocationPicked(location: Loc) {
         hideKeyboard()
         val intent = Intent(context, WeatherFragment::class.java)
-        intent.putExtra(LOCATION_BUNDLE_EXTRA, location)
+        intent.putExtra(WeatherFragment.LOCATION_BUNDLE_EXTRA, location)
         targetFragment!!.onActivityResult(targetRequestCode, RESULT_OK, intent)
         fragmentManager!!.popBackStack()
     }

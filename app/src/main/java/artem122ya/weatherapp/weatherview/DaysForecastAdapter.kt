@@ -1,5 +1,6 @@
 package artem122ya.weatherapp.weatherview
 
+import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -27,7 +28,7 @@ class DaysForecastAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             notifyDataSetChanged()
         }
 
-    var selectedItem = 0
+    private var selectedItem = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -62,13 +63,19 @@ class DaysForecastAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = daysDataSet.size
 
+    fun resetSelectedItem() {
+        val previousSelectedItem = selectedItem
+        selectedItem = 0
+        notifyItemChanged(previousSelectedItem)
+        notifyItemChanged(selectedItem)
+    }
 
     inner class DayViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
 
         val dayOfWeekTextView: TextView = view.dayOfWeekTextView
         val temperatureTextView: TextView = view.dayTemperatureTextView
         val weatherImageView: ImageView = view.weatherIconImageView
-        val dayItemLayout: LinearLayout = view.dayItemLayout
+        val dayItemLayout: ConstraintLayout = view.dayItemLayout
         init {
             view.setOnClickListener(this)
         }

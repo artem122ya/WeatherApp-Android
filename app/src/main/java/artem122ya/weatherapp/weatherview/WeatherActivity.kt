@@ -12,7 +12,7 @@ class WeatherActivity: AppCompatActivity() {
         setContentView(R.layout.weather_activity)
 
         if (supportFragmentManager.findFragmentById(R.id.contentFrame) == null) {
-            val weatherFragment = WeatherFragment.newInstance()
+            val weatherFragment = WeatherFragment()
             WeatherPresenter.getInstance(weatherFragment)
             supportFragmentManager.beginTransaction().add(R.id.contentFrame, weatherFragment).commit()
         }

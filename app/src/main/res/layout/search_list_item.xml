@@ -15,5 +15,5 @@
         android:textColor="@color/colorBlack"
         android:layout_gravity="center"
         tools:text="City Name, Country Name"
-        android:textSize="@dimen/text_size" />
+        android:textSize="18sp" />
 </FrameLayout>

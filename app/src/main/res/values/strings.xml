@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-    <string name="meters_per_second_label">%1$dmeters/sec</string>
+    <string name="meters_per_second_label">%1$dm/sec</string>
     <string name="humidity_percentage_label" translatable="false">%1$d%%</string>
     <string name="hours_label" translatable="false">%1$02d \u2070\u2070</string>
     <string name="temperature_label" translatable="false">%1d°/%2d°</string>
     <string name="search_loading_error_message">Error loading locations</string>
+    <string name="loading_data_error_message">Error loading data</string>
+    <string name="access_location_error_message">Can\'t access location</string>
+    <string name="location_permission_error_message">Permission required to access location</string>
 </resources>
